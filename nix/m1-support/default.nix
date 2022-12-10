@@ -4,6 +4,7 @@
     ./kernel
     ./peripheral-firmware
     ./boot-m1n1
+    ./mesa
   ];
 
   config = {

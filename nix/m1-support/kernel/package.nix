@@ -25,7 +25,7 @@
     echo "{ }" >> $out
   '').outPath;
 
-  linux_asahi_pkg = { stdenv, lib, fetchFromGitHub, fetchpatch, linuxKernel, ... } @ args:
+  linux_asahi_pkg = { stdenv, lib, fetchFromGitHub, fetchpatch, linuxKernel, extraMakeFlags, ... } @ args:
     let
       configfile = if kernelPatches == [ ] then ./config else
       pkgs.writeText "config" ''
@@ -38,7 +38,7 @@
       _kernelPatches = kernelPatches;
     in
     linuxKernel.manualConfig rec {
-      inherit stdenv lib;
+      inherit stdenv lib extraMakeFlags;
 
       version = "6.1.0-rc8-asahi";
       modDirVersion = version;
@@ -74,6 +74,21 @@
       extraMeta.branch = "6.1";
     } // (args.argsOverride or {});
 
-  linux_asahi = (pkgs.callPackage linux_asahi_pkg { });
+  inherit (pkgs.rustPlatform.rust) rustc;
+  inherit (pkgs.rustPlatform) rustLibSrc;
+  inherit (pkgs) rust-bindgen;
+
+  extraMakeFlags = [
+    "RUSTC=${rustc}/bin/rustc"
+    "BINDGEN=${rust-bindgen}/bin/bindgen"
+    "RUST_LIB_SRC=${rustLibSrc}"
+  ];
+  # linux_asahi = (pkgs.callPackage linux_asahi_pkg { });
+  linux_asahi = (pkgs.callPackage linux_asahi_pkg { inherit extraMakeFlags; }).overrideAttrs(prior: {
+    nativeBuildInputs = prior.nativeBuildInputs ++ [ rustc rust-bindgen rustLibSrc ];
+  });
+
+
+
 in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_asahi)
 
