@@ -3,6 +3,7 @@
 {
   config = {
     hardware.opengl.enable = true;
-    hardware.opengl.package = config.hardware.asahi.pkgs.mesa.drivers;
+    hardware.opengl.package = pkgs.mesaAsahi;
+    # hardware.opengl.package = pkgs.mesa;
   };
 }

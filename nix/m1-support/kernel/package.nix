@@ -47,8 +47,14 @@
         # tracking: https://github.com/AsahiLinux/PKGBUILDs/blob/stable/linux-asahi/PKGBUILD
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.1-rc8-2";
-        hash = "sha256-P4PiqD4tF8ZiOxY59O4mYhDuQMZkoMjJuqmRGN0hJ/o=";
+        # rev = "asahi-6.1-rc8-2";
+        # hash = "sha256-P4PiqD4tF8ZiOxY59O4mYhDuQMZkoMjJuqmRGN0hJ/o=";
+
+
+        # https://github.com/AsahiLinux/linux
+        #   branch = rust-wip
+        rev = "70d2e78f68657f8647e0466d319309901ae78587";
+        hash = "sha256-BRu+mHsIUz30Jmg3k8wa4KHMUxmbAH71rISZ/EtwS94=";
       };
 
       kernelPatches = [
